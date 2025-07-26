@@ -1,16 +1,47 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+*.pyc
 
-# Env files
+# Django migrations
+**/migrations/
+!**/migrations/__init__.py
+
+# SQLite database
+db.sqlite3
+
+# Secrets and environment
 .env
+.env.*
 
-# Virtual environment
+# Virtualenv
 venv/
+ENV/
+.venv/
+env/
 
-# VSCode or PyCharm settings
+# Logs
+*.log
+*.pid
+*.gz
+*.coverage
+
+# Static and media
+staticfiles/
+media/
+media_root/
+
+# Redis (if using dump.rdb for local persistence)
+dump.rdb
+
+# VSCode
 .vscode/
+
+# PyCharm
 .idea/
 
-# Byte-compiled
-*.pyc
+# System
+.DS_Store
+Thumbs.db

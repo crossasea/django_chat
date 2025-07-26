@@ -132,9 +132,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-
-ASGI_APPLICATION = 'backend.asgi.application'
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -148,3 +145,25 @@ CHANNEL_LAYERS = {
 CORS_ALLOW_ALL_ORIGINS = True  # if using CORS
 
 AUTH_USER_MODEL = 'messaging.User'
+
+# settings.py
+
+ASGI_APPLICATION = "chat.asgi.application"  # replace `chat` with your project name
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=600),  # default: 5 minutes
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),     # default: 1 day
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": False,
+
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+}
