@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WebSocket Tester</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    #log { border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: scroll; background: #f8f8f8; }
+    input, button { padding: 6px; margin: 4px 0; width: 100%; }
+    textarea { width: 100%; height: 80px; }
+  </style>
+</head>
+<body>
+  <h2>🧪 WebSocket Client</h2>
+
+  <label>WebSocket URL</label>
+  <input id="ws-url" value="ws://localhost:8000/ws/chat/?token=">
+
+  <label>JWT Token</label>
+  <input id="jwt-token" placeholder="Paste JWT here">
+
+  <button onclick="connect()">🔌 Connect</button>
+  <button onclick="disconnect()">❌ Disconnect</button>
+
+  <hr />
+
+  <label>Message to send (JSON)</label>
+  <textarea id="message">{ "action": "send_message", "recipient_id": 2, "content": "Hello from browser" }</textarea>
+  <button onclick="sendMessage()">📤 Send</button>
+
+  <h3>📜 Logs</h3>
+  <div id="log"></div>
+
+  <script>
+    let socket;
+
+    function log(msg) {
+      const logBox = document.getElementById("log");
+      logBox.innerHTML += `<div>${msg}</div>`;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function connect() {
+      const baseUrl = document.getElementById("ws-url").value;
+      const token = document.getElementById("jwt-token").value.trim();
+      const url = baseUrl + encodeURIComponent(token);
+
+      socket = new WebSocket(url);
+
+      socket.onopen = () => log("✅ Connected");
+      socket.onmessage = (e) => log("📨 " + e.data);
+      socket.onerror = (e) => log("❌ Error: " + JSON.stringify(e));
+      socket.onclose = () => log("🔌 Disconnected");
+    }
+
+    function disconnect() {
+      if (socket) socket.close();
+    }
+
+    function sendMessage() {
+      const msg = document.getElementById("message").value;
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(msg);
+        log("📤 Sent: " + msg);
+      } else {
+        log("⚠️ Not connected");
+      }
+    }
+  </script>
+</body>
+</html>
